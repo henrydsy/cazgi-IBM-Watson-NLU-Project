@@ -45,17 +45,17 @@ class App extends React.Component {
     }
     ret = axios.get(url);
     ret.then((response)=>{
-
-      //Include code here to check the sentiment and fomrat the data accordingly
-
-      this.setState({sentimentOutput:response.data});
+        console.log(response)
+        let emotion = response.data.result.sentiment.document.label;
+        console.log(emotion);
+      this.setState({sentimentOutput:emotion});
       let output = response.data;
-      if(response.data === "positive") {
-        output = <div style={{color:"green",fontSize:20}}>{response.data}</div>
-      } else if (response.data === "negative"){
-        output = <div style={{color:"red",fontSize:20}}>{response.data}</div>
+      if(emotion === "positive") {
+        output = <div style={{color:"green",fontSize:20}}>{emotion}</div>
+      } else if (emotion === "negative"){
+        output = <div style={{color:"red",fontSize:20}}>{emotion}</div>
       } else {
-        output = <div style={{color:"orange",fontSize:20}}>{response.data}</div>
+        output = <div style={{color:"yellow",fontSize:20}}>{emotion}</div>
       }
       this.setState({sentimentOutput:output});
     });
@@ -73,14 +73,17 @@ class App extends React.Component {
     ret = axios.get(url);
 
     ret.then((response)=>{
-      this.setState({sentimentOutput:<EmotionTable emotions={response.data}/>});
+        console.log(response)
+        console.log(response.data.result.emotion.document.emotion);
+      this.setState({sentimentOutput:<EmotionTable emotions={response.data.result.emotion.document.emotion}/>});
   });
   }
   
 
   render() {
-    return (  
+    return (
       <div className="App">
+        <title>Sentiment Analyzer</title>  
       <button className="btn btn-info" onClick={this.renderTextArea}>Text</button>
         <button className="btn btn-dark"  onClick={this.renderTextBox}>URL</button>
         <br/><br/>
